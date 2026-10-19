@@ -1,0 +1,18 @@
+{
+  "name": "agent-process-practice",
+  "version": "0.1.0",
+  "description": "에이전트 작업자 연습용 할 일 목록 CLI. 외부 의존성 없음.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "node --test test/todo.test.js test/cli.test.js",
+    "check": "node scripts/check.js",
+    "test:task02": "node --test tasks/tests/task02.test.js",
+    "test:task03": "node --test tasks/tests/task03.test.js"
+  },
+  "license": "MIT"
+}
