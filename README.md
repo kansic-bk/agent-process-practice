@@ -6,13 +6,13 @@
 
 - Node.js 26.10.0 (이 저장소를 만든 맥북의 설치본 기준. `node:test`를 쓰므로 Node 20 이상이면 동작하지만, 확인된 버전은 26.10.0이다)
 - npm 11.19.1 (Node와 함께 설치된 것)
-- 설치할 외부 패키지 없음. `npm install`은 package-lock.json만 만든다.
+- 설치할 패키지가 없어 `npm install`은 아무 파일도 바꾸지 않는다.
 
 ## 작업자 안내 — 반드시 이 순서로
 
 지시문을 받은 작업자는 아래 1~6을 순서대로 하고, 각 단계의 명령과 exit code를 완료 보고에 적는다.
 
-1. 받기: `git clone <지시문에 적힌 저장소 주소> agent-process-practice && cd agent-process-practice`
+1. 받기: `git clone https://github.com/kansic-bk/agent-process-practice.git agent-process-practice && cd agent-process-practice`
 2. 설치: `npm install` (exit 0이어야 한다. 설치할 패키지가 없으므로 수 초 안에 끝난다)
 3. 테스트: `npm test` (exit 0이어야 한다)
 4. 검사: `npm run check` (exit 0이어야 한다. 안내문의 기능 지도와 코드가 맞는지, 과제 파일 형식이 맞는지 본다)
