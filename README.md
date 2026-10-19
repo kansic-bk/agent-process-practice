@@ -76,6 +76,41 @@ node src/cli.js [--file <경로>] <명령> [인자]
 | 명령 실행(진입점) | `src/cli.js` | `run` | `npm test` |
 | 개수 집계 | `src/stats.js` | `summarize` | `npm run test:task03` (과제 3 전까지는 설계대로 실패) |
 
+## removeTask 사용법
+
+`removeTask(store, id)`는 `store`에서 번호가 `id`인 할 일을 하나 삭제하고, 삭제된 항목을 돌려준다. 저장소에 그 번호가 없으면 `Error`를 던진다.
+
+- `store`: `createStore()`가 돌려주는 저장소 객체. 형태는 `{ nextId, tasks }`다.
+- `id`: 삭제할 할 일의 번호. `addTask`가 그 항목에 붙인 숫자와 같아야 한다.
+
+아래는 `createStore` → `addTask` → `removeTask` 순서의 예시다. 저장소 루트에서 이 명령을 실행한다.
+
+```
+node --input-type=module -e 'import { createStore, addTask, removeTask } from "./src/todo.js"; const store = createStore(); addTask(store, "우유 사기"); console.log(JSON.stringify(removeTask(store, 1)));'
+```
+
+표준 출력은 다음 한 줄이다. 이것이 `removeTask(store, 1)`이 돌려준 값이다.
+
+```
+{"id":1,"text":"우유 사기","done":false}
+```
+
+없는 번호를 넘기면 `Error`를 던진다. 빈 저장소에서 `removeTask(store, 1)`을 호출한 예:
+
+```
+node --input-type=module -e 'import { createStore, removeTask } from "./src/todo.js"; const store = createStore(); try { removeTask(store, 1); console.log("NO_THROW"); } catch (error) { console.log(error instanceof Error); console.log(error.name); console.log(error.message); }'
+```
+
+표준 출력:
+
+```
+true
+Error
+번호 1인 할 일이 없습니다
+```
+
+`true`는 던져진 값이 `Error` 인스턴스라는 뜻이고, 메시지는 `번호 1인 할 일이 없습니다`다.
+
 ## 검증 명령과 현재 상태
 
 | 명령 | 하는 일 | 처음 받은 상태에서의 결과 |
