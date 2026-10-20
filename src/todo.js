@@ -49,6 +49,17 @@ export function removeTask(store, id) {
   return removed;
 }
 
+/**
+ * 완료(done: true)된 항목을 모두 지우고 지운 개수를 돌려준다.
+ * nextId는 바꾸지 않아 번호가 재사용되지 않는다.
+ */
+export function clearCompleted(store) {
+  const remaining = store.tasks.filter((task) => !task.done);
+  const removed = store.tasks.length - remaining.length;
+  store.tasks = remaining;
+  return removed;
+}
+
 /** 한 줄 표시 형식. 예: "[x] 3 우유 사기" */
 export function formatTask(task) {
   return `[${task.done ? "x" : " "}] ${task.id} ${task.text}`;
