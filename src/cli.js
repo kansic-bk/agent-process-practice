@@ -2,7 +2,7 @@
 // 명령줄 진입점. 사용법은 README.md의 "명령 사용법" 절을 본다.
 import { pathToFileURL } from "node:url";
 import { loadStore, saveStore } from "./storage.js";
-import { addTask, listTasks, completeTask, removeTask, formatTask } from "./todo.js";
+import { addTask, listTasks, completeTask, removeTask, formatTask, clearCompleted } from "./todo.js";
 
 const USAGE = `사용법: node src/cli.js [--file <경로>] <명령> [인자]
 명령:
@@ -10,6 +10,7 @@ const USAGE = `사용법: node src/cli.js [--file <경로>] <명령> [인자]
   list           목록 출력
   done <번호>    완료 처리
   remove <번호>  삭제
+  clear-done     완료 항목 일괄 삭제
 --file을 생략하면 현재 폴더의 todo.json을 쓴다.`;
 
 /** 인자 배열을 { filePath, command, rest }로 나눈다. */
@@ -60,6 +61,11 @@ export function run(argv) {
       const task = removeTask(store, parseId(rest[0]));
       saveStore(filePath, store);
       return [`삭제: ${formatTask(task)}`];
+    }
+    case "clear-done": {
+      const removed = clearCompleted(store);
+      saveStore(filePath, store);
+      return [`완료 항목 ${removed}개 삭제`];
     }
     default:
       throw new Error(USAGE);

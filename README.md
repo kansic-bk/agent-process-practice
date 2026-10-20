@@ -53,6 +53,7 @@ node src/cli.js [--file <경로>] <명령> [인자]
   list           목록 출력             예: node src/cli.js list
   done <번호>    완료 처리             예: node src/cli.js done 1
   remove <번호>  삭제                  예: node src/cli.js remove 1
+  clear-done     완료 항목 일괄 삭제     예: node src/cli.js clear-done
 ```
 
 `--file`을 생략하면 현재 폴더의 `todo.json`에 저장한다(이 파일은 .gitignore에 있다). 출력 형식은 `[ ] 1 우유 사기`(미완료), `[x] 1 우유 사기`(완료)다. 잘못된 명령·번호·빈 내용은 exit 1과 함께 표준 오류에 이유를 출력한다.
@@ -69,6 +70,7 @@ node src/cli.js [--file <경로>] <명령> [인자]
 | 번호로 찾기 | `src/todo.js` | `findTask` | `npm test` |
 | 완료 처리 | `src/todo.js` | `completeTask` | `npm test` |
 | 삭제 | `src/todo.js` | `removeTask` | `npm test` |
+| 완료 항목 일괄 삭제 | `src/todo.js` | `clearCompleted` | `npm run test:task02` |
 | 한 줄 표시 형식 | `src/todo.js` | `formatTask` | `npm test` |
 | 저장 파일 읽기 | `src/storage.js` | `loadStore` | `npm test` |
 | 저장 파일 쓰기 | `src/storage.js` | `saveStore` | `npm test` |
