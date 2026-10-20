@@ -7,6 +7,6 @@
 export function summarize(tasks) {
   const total = tasks.length;
   const done = tasks.filter((task) => task.done).length;
-  const open = tasks.filter((task) => task.done).length;
+  const open = tasks.filter((task) => !task.done).length;
   return { total, done, open };
 }
