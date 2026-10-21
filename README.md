@@ -119,8 +119,9 @@ Error
 |---|---|---|
 | `npm test` | 핵심 로직과 CLI 테스트 (`test/` 폴더) | exit 0 |
 | `npm run check` | 기능 지도·문법·과제 파일 형식 검사 (`scripts/check.js`) | exit 0 |
-| `npm run test:task02` | 과제 2의 검증 테스트 | exit 1 (기능이 아직 없으므로 실패가 정상) |
-| `npm run test:task03` | 과제 3의 검증 테스트 | exit 1 (고칠 버그가 있으므로 실패가 정상) |
+| `npm run test:task02` | 과제 2의 검증 테스트 | exit 0 (과제 2 완료 — 기능 구현됨) |
+| `npm run test:task03` | 과제 3의 검증 테스트 | exit 0 (과제 3 완료 — 버그 수정됨) |
+| `npm run test:task04` | 과제 4의 검증 테스트 | exit 1 (구현 전 — 실패가 정상) |
 
 과제 테스트는 일부러 `npm test`에 넣지 않았다. 과제를 끝낸 뒤에도 `npm test`는 항상 exit 0이어야 한다. `node --test`를 인자 없이 실행하면 과제 테스트까지 함께 잡혀 실패로 보이므로, 테스트는 반드시 `npm test`로 돌린다.
 
@@ -131,6 +132,7 @@ Error
 | 과제 1 | 문서: `removeTask` 사용법 절을 README에 추가 | `tasks/TASK-01.md` |
 | 과제 2 | 코드: 완료 항목 일괄 삭제 기능 추가 (테스트 제공) | `tasks/TASK-02.md` |
 | 과제 3 | 수리: 실패하는 테스트를 통과시키기 | `tasks/TASK-03.md` |
+| 과제 4 | 코드: 완료한 할 일을 날짜별로 묶어 보여 주는 report 명령 추가 (테스트 제공) | `tasks/TASK-04.md` |
 
 ## 저장소 구조
 
