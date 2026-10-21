@@ -12,7 +12,8 @@
     "test": "node --test test/todo.test.js test/cli.test.js",
     "check": "node scripts/check.js",
     "test:task02": "node --test tasks/tests/task02.test.js",
-    "test:task03": "node --test tasks/tests/task03.test.js"
+    "test:task03": "node --test tasks/tests/task03.test.js",
+    "test:task04": "node --test tasks/tests/task04.test.js"
   },
   "license": "MIT"
 }
