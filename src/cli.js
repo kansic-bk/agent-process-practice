@@ -3,14 +3,16 @@
 import { pathToFileURL } from "node:url";
 import { loadStore, saveStore } from "./storage.js";
 import { addTask, listTasks, completeTask, removeTask, formatTask, clearCompleted } from "./todo.js";
+import { formatReport } from "./report.js";
 
 const USAGE = `사용법: node src/cli.js [--file <경로>] <명령> [인자]
 명령:
-  add <내용>     할 일 추가
-  list           목록 출력
-  done <번호>    완료 처리
-  remove <번호>  삭제
-  clear-done     완료 항목 일괄 삭제
+  add <내용>                       할 일 추가
+  list                             목록 출력
+  done <번호> [--date YYYY-MM-DD]  완료 처리
+  remove <번호>                    삭제
+  clear-done                       완료 항목 일괄 삭제
+  report                           완료 항목을 날짜별로 출력
 --file을 생략하면 현재 폴더의 todo.json을 쓴다.`;
 
 /** 인자 배열을 { filePath, command, rest }로 나눈다. */
@@ -38,6 +40,15 @@ function parseId(value) {
   return id;
 }
 
+function readDateFlag(rest) {
+  const at = rest.indexOf("--date");
+  if (at === -1) return undefined;
+  if (at + 1 >= rest.length) {
+    throw new Error("완료 날짜는 YYYY-MM-DD 형식의 달력 날짜여야 합니다: undefined");
+  }
+  return rest[at + 1];
+}
+
 /** 명령을 실행하고 출력할 문자열 배열을 돌려준다. 실패는 Error로 던진다. */
 export function run(argv) {
   const { filePath, command, rest } = parseArgs(argv);
@@ -53,7 +64,8 @@ export function run(argv) {
       return tasks.length === 0 ? ["(할 일 없음)"] : tasks.map(formatTask);
     }
     case "done": {
-      const task = completeTask(store, parseId(rest[0]));
+      const id = parseId(rest[0]);
+      const task = completeTask(store, id, readDateFlag(rest));
       saveStore(filePath, store);
       return [`완료: ${formatTask(task)}`];
     }
@@ -67,6 +79,8 @@ export function run(argv) {
       saveStore(filePath, store);
       return [`완료 항목 ${removed}개 삭제`];
     }
+    case "report":
+      return formatReport(store.tasks);
     default:
       throw new Error(USAGE);
   }
