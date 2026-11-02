@@ -51,9 +51,10 @@ node src/cli.js [--file <경로>] <명령> [인자]
 
   add <내용>     할 일 추가            예: node src/cli.js add 우유 사기
   list           목록 출력             예: node src/cli.js list
-  done <번호>    완료 처리             예: node src/cli.js done 1
+  done <번호> [--date YYYY-MM-DD]  완료 처리  예: node src/cli.js done 1
   remove <번호>  삭제                  예: node src/cli.js remove 1
   clear-done     완료 항목 일괄 삭제     예: node src/cli.js clear-done
+  report         완료 항목을 날짜별로 출력  예: node src/cli.js report
 ```
 
 `--file`을 생략하면 현재 폴더의 `todo.json`에 저장한다(이 파일은 .gitignore에 있다). 출력 형식은 `[ ] 1 우유 사기`(미완료), `[x] 1 우유 사기`(완료)다. 잘못된 명령·번호·빈 내용은 exit 1과 함께 표준 오류에 이유를 출력한다.
@@ -77,6 +78,7 @@ node src/cli.js [--file <경로>] <명령> [인자]
 | 명령줄 인자 해석 | `src/cli.js` | `parseArgs` | `npm test` |
 | 명령 실행(진입점) | `src/cli.js` | `run` | `npm test` |
 | 개수 집계 | `src/stats.js` | `summarize` | `npm run test:task03` (과제 3 전까지는 설계대로 실패) |
+| 완료 항목 날짜별 보고 | `src/report.js` | `formatReport` | `npm run test:task04` |
 
 ## removeTask 사용법
 
@@ -121,7 +123,7 @@ Error
 | `npm run check` | 기능 지도·문법·과제 파일 형식 검사 (`scripts/check.js`) | exit 0 |
 | `npm run test:task02` | 과제 2의 검증 테스트 | exit 0 (과제 2 완료 — 기능 구현됨) |
 | `npm run test:task03` | 과제 3의 검증 테스트 | exit 0 (과제 3 완료 — 버그 수정됨) |
-| `npm run test:task04` | 과제 4의 검증 테스트 | exit 1 (구현 전 — 실패가 정상) |
+| `npm run test:task04` | 과제 4의 검증 테스트 | exit 0 (과제 4 완료, 기능 구현됨) |
 
 과제 테스트는 일부러 `npm test`에 넣지 않았다. 과제를 끝낸 뒤에도 `npm test`는 항상 exit 0이어야 한다. `node --test`를 인자 없이 실행하면 과제 테스트까지 함께 잡혀 실패로 보이므로, 테스트는 반드시 `npm test`로 돌린다.
 
@@ -138,6 +140,7 @@ Error
 
 ```
 src/todo.js            핵심 로직 (순수 함수)
+src/report.js          완료 항목 날짜별 보고
 src/storage.js         JSON 파일 읽기·쓰기
 src/stats.js           개수 집계 (과제 3 대상)
 src/cli.js             명령줄 진입점
