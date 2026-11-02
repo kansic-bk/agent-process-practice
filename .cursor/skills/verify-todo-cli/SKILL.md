@@ -1,6 +1,6 @@
 ---
 name: verify-todo-cli
-description: "agent-process-practice 할 일 CLI를 임시 저장 파일과 tmux로 사용자처럼 실행해 add, list, done, remove, clear-done을 증명한다. README 기능 지도와 npm test, npm run check, npm run test:taskNN을 확인할 때 쓴다."
+description: "agent-process-practice 할 일 CLI를 임시 저장 파일과 tmux로 사용자처럼 실행해 add, list, done, done --date, report, remove, clear-done을 증명한다. README 기능 지도와 npm test, npm run check, npm run test:taskNN을 확인할 때 쓴다."
 ---
 
 # 할 일 CLI 검수
@@ -9,7 +9,7 @@ description: "agent-process-practice 할 일 CLI를 임시 저장 파일과 tmux
 
 저장소 루트에서 실행한다. 루트는 `package.json`의 `name`이 `agent-process-practice`인 디렉터리다. 의존 패키지는 없다. 검수에 npm 패키지를 추가하지 않는다.
 
-검수 중에 `src/`, `test/`, `tasks/tests/`, `package.json`을 고치지 않는다. `report` 명령과 `src/report.js`는 현재 main에 없다. 없는 것을 이 스킬을 돌리다가 구현하지 않는다.
+검수 중에 `src/`, `test/`, `tasks/tests/`, `package.json`을 고치지 않는다. 빠진 명령을 이 스킬을 돌리다가 구현하지 않는다.
 
 ## Launch
 
@@ -92,7 +92,7 @@ exit 0이고 마지막 의미 있는 줄이 `doctor ok`여야 한다. doctor는 
 - tmux 세션 `todo-cli-verify-$RUN_ID`가 살아 있고, 그 창의 현재 디렉터리가 이 저장소 루트다.
 - `node`의 주 버전이 20 이상이다.
 - `package.json`의 이름이 `agent-process-practice`다.
-- `src/**/*.js`가 `node --check`를 통과한다. 현재 main의 파일은 `src/cli.js`, `src/stats.js`, `src/storage.js`, `src/todo.js`다.
+- `src/**/*.js`가 `node --check`를 통과한다. doctor는 `src/` 아래 `.js`를 모두 본다. 그 목록에는 `src/cli.js`, `src/report.js`, `src/stats.js`, `src/storage.js`, `src/todo.js`가 있다.
 - 그 파일들의 sha256이 launch 때 적어 둔 `$EVIDENCE/src.sha256`과 같다. 소스를 고쳤으면 새 launch가 필요하다.
 - 저장 경로가 `/tmp/todo-cli-verify-data-$RUN_ID/todo.json`이고, 저장소 안의 파일이 아니며, 심볼릭 링크가 아니다.
 - `node src/cli.js --file <그 경로> fly`가 exit 1이고, 표준 오류에 `사용법: node src/cli.js [--file <경로>] <명령> [인자]`가 있으며, 저장 파일의 내용과 존재 여부가 그대로다.
@@ -211,10 +211,11 @@ README의 `## 기능 지도` 표는 기능 이름, 파일, 함수, 검증 명령
 | 할 일 추가 | `src/todo.js` | `addTask` | `npm test` | `add` | `add-task.md` |
 | 목록 조회 | `src/todo.js` | `listTasks` | `npm test` | `list` | `list-tasks.md` |
 | 번호로 찾기 | `src/todo.js` | `findTask` | `npm test` | `done`, `remove`가 번호를 찾을 때 | `complete-task.md`, `remove-task.md` |
-| 완료 처리 | `src/todo.js` | `completeTask` | `npm test` | `done` | `complete-task.md` |
+| 완료 처리 | `src/todo.js` | `completeTask` | `npm test` | `done`, `done --date` | `complete-task.md`, `done-date.md` |
+| 완료 항목 날짜별 보고 | `src/report.js` | `formatReport` | `npm run test:task04` | `report` | `report.md` |
 | 삭제 | `src/todo.js` | `removeTask` | `npm test` | `remove` | `remove-task.md` |
 | 완료 항목 일괄 삭제 | `src/todo.js` | `clearCompleted` | `npm run test:task02` | `clear-done` | `clear-done.md` |
-| 한 줄 표시 형식 | `src/todo.js` | `formatTask` | `npm test` | `add`, `list`, `done`, `remove`의 한 줄 | 해당 기능 파일 |
+| 한 줄 표시 형식 | `src/todo.js` | `formatTask` | `npm test` | `add`, `list`, `done`, `remove`, `report`의 한 줄 | 해당 기능 파일 |
 | 저장 파일 읽기 | `src/storage.js` | `loadStore` | `npm test` | 모든 명령 | 모든 기능 파일 |
 | 저장 파일 쓰기 | `src/storage.js` | `saveStore` | `npm test` | `add`, `done`, `remove`, `clear-done` | 해당 기능 파일 |
 | 명령줄 인자 해석 | `src/cli.js` | `parseArgs` | `npm test` | `--file`과 명령 | 모든 기능 파일 |
@@ -223,21 +224,21 @@ README의 `## 기능 지도` 표는 기능 이름, 파일, 함수, 검증 명령
 
 `개수 집계`는 CLI 명령이 아니다. `npm run test:task03`으로만 확인한다. README의 `## removeTask 사용법`은 같은 삭제를 함수로 부르는 예다. 사용자 검수 경로는 `remove` 명령이다.
 
-`완료 항목 날짜별 보고` 행은 현재 README 표에 없다. `tasks/TASK-04.md`의 `report`는 아직 사용자 명령이 아니므로 기능 지도에 넣지 않는다.
+`report`는 저장 파일을 만들거나 바꾸지 않는다. `done --date`는 완료 날짜만 바꾸고 `done`과 `list`의 한 줄에는 날짜를 붙이지 않는다. 두 사용자 명령은 `done-date.md`와 `report.md`에서 확인한다.
 
 ## 저장소 검사
 
-CLI 운전과 별도로, 저장소 루트에서 다음을 실행한다. `node --test`를 인자 없이 실행하지 않는다. 과제 테스트까지 잡아 `test:task04` 때문에 실패로 보인다. 테스트는 아래 npm 스크립트만 쓴다.
+CLI 운전과 별도로, 저장소 루트에서 다음을 실행한다. 검수 명령은 아래 npm 스크립트만 쓴다.
 
-| 명령 | 현재 main의 exit | 기대 |
+| 명령 | exit | 기대 |
 |---|---|---|
 | `npm test` | 0 | `test/todo.test.js`와 `test/cli.test.js`만 실행한다 |
 | `npm run check` | 0 | 마지막 줄이 `check 통과: 기능 지도·문법·과제 파일 모두 정상` |
 | `npm run test:task02` | 0 | 완료 항목 일괄 삭제가 구현되어 있다 |
 | `npm run test:task03` | 0 | `summarize`가 구현되어 있다 |
-| `npm run test:task04` | 1 | `src/report.js`가 없어 `ERR_MODULE_NOT_FOUND`다. 출력에 `src/report.js`가 있다 |
+| `npm run test:task04` | 0 | `formatReport`와 `report`, `done --date`가 과제 테스트를 통과한다 |
 
-`test:task04`의 exit 1은 현재 main의 정상 상태다. 검수 중에 구현하거나 테스트를 고치지 않는다.
+검수 중에 제품 코드를 바꾸거나 테스트를 고치지 않는다.
 
 ## Maintenance
 

@@ -27,7 +27,7 @@
 - 표준 출력만으로 저장됐다고 하지 않는다.
 - 기능 파일의 선행 조건이 없으면, 시도한 명령과 없던 조건을 적고 그 항목은 실패다.
 - 실행하지 않은 진입점을 다른 경로로 통과했다고 적지 않는다.
-- `report`는 현재 사용자 명령이 아니다. 기능 파일로 만들지 않고, `npm run test:task04`의 exit 1을 구현 실패로 고치지 않는다.
+- `report`와 `done --date`는 사용자 명령이다. `report.md`와 `done-date.md`의 운전을 모두 실행한다. 저장 파일을 검수자가 고쳐 날짜 없는 완료 항목을 만들지 않는다. 그 묶음은 `npm run test:task04`가 본다.
 
 ## Feature entry contract
 
@@ -45,6 +45,8 @@
 - [완료 처리](./complete-task.md)는 `done`으로 완료 표시를 하고, 잘못된 번호를 거절한다.
 - [할 일 삭제](./remove-task.md)는 `remove`로 한 항목을 지우고, 지운 번호를 다시 쓰지 않는지 본다.
 - [완료 항목 일괄 삭제](./clear-done.md)는 `clear-done`으로 완료 항목만 지운다.
+- [완료 날짜](./done-date.md)는 `done --date YYYY-MM-DD`로 완료 날짜를 적고, 잘못된 날짜는 파일을 그대로 둔다.
+- [완료 보고](./report.md)는 `report`로 완료 항목을 날짜별로 보여 주고, 시간대가 달라도 같은 파일은 같은 출력을 낸다.
 
 README `## 기능 지도`의 기능 열과의 연결이다. 파일과 함수 이름은 상위 `SKILL.md`의 표에 있다.
 
@@ -55,5 +57,7 @@ README `## 기능 지도`의 기능 열과의 연결이다. 파일과 함수 이
 | `complete-task.md` | `done` | 완료 처리, 번호로 찾기, 저장 파일 쓰기 | `npm test` |
 | `remove-task.md` | `remove` | 삭제, 번호로 찾기, 저장 파일 쓰기 | `npm test` |
 | `clear-done.md` | `clear-done` | 완료 항목 일괄 삭제 | `npm run test:task02` |
+| `done-date.md` | `done --date` | 완료 처리 | `npm test`, `npm run test:task04` |
+| `report.md` | `report` | 완료 항목 날짜별 보고 | `npm run test:task04` |
 
 `개수 집계`는 사용자 명령이 없다. `npm run test:task03`으로 확인한다.
